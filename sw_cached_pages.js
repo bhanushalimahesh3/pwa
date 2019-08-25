@@ -12,12 +12,12 @@ const cacheAssets = [
 
 // call install event
 self.addEventListener('install', function(e){
-	console.log(`service worker installed`);
+	
 	e.waitUntil(
 		caches
 		.open(cacheName)
 		.then(function(cache){
-			console.log('service worker caching files');
+			
 			cache.addAll(cacheAssets);
 		})
 		.then(function(){
@@ -28,6 +28,34 @@ self.addEventListener('install', function(e){
 });
 
 // call activate event
-self.addEventListener('activate', function(e){
+/*self.addEventListener('activate', function(e){
 	console.log(`service worker activated`);
+});*/
+
+self.addEventListener('fetch', event => {
+  console.log('Fetch event for ', event.request.url);
+  event.respondWith(
+    caches.match(event.request)
+    .then(response => {
+      if (response) {        
+        return response;
+      }
+
+      return fetch(event.request).then(response => {
+      	console.log(`response ${event.request}`);
+				  // TODO 5 - Respond with custom 404 page
+				  return caches.open(cacheName).then(cache => {
+				    cache.put(event.request, response.clone());
+				    return response;
+				  });
+				});
+
+
+
+    }).catch(error => {
+    	console.log(`error ${error}`);
+      // TODO 6 - Respond with custom offline page
+
+    })
+  );
 });

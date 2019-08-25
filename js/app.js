@@ -4,7 +4,7 @@ if(navigator.serviceWorker) {
 		navigator.serviceWorker
 		.register('sw_cached_pages.js')
 		.then(function(response) {
-			console.log('service worker registered');
+			
 		})
 		.catch(function(error){
 			console.log(`error ${error}`);
