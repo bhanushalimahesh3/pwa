@@ -33,7 +33,7 @@ self.addEventListener('install', function(e){
 });*/
 
 self.addEventListener('fetch', event => {
-  console.log('Fetch event for ', event.request.url);
+  
   event.respondWith(
     caches.match(event.request)
     .then(response => {
@@ -42,7 +42,7 @@ self.addEventListener('fetch', event => {
       }
 
       return fetch(event.request).then(response => {
-      	console.log(`response ${event.request}`);
+
 				  // TODO 5 - Respond with custom 404 page
 				  return caches.open(cacheName).then(cache => {
 				    cache.put(event.request, response.clone());
